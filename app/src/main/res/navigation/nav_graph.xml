@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/startFragment">
+    app:startDestination="@id/splashScreenFragment">
 
     <fragment
         android:id="@+id/startFragment"
@@ -35,5 +35,14 @@
         <argument
             android:name="todo"
             app:argType="com.example.todolist.data.ToDo" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashScreenFragment"
+        android:name="com.example.todolist.SplashScreenFragment"
+        android:label="fragment_splash_screen"
+        tools:layout="@layout/fragment_splash_screen" >
+        <action
+            android:id="@+id/action_splashScreenFragment_to_startFragment"
+            app:destination="@id/startFragment" />
     </fragment>
 </navigation>

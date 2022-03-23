@@ -8,8 +8,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.data.ToDo
 
-class ToDoAdapter (private val quotesList: List<ToDo>): RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder>() {
-    class ToDoViewHolder(view: View): RecyclerView.ViewHolder(view) {
+class ToDoAdapter (private val toDoList: List<ToDo>): RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder>() {
+
+    private var clickListener: ClickListener? = null
+
+    fun setOnItemClickListener(clickListener: ClickListener){
+        this.clickListener = clickListener
+    }
+
+    interface  ClickListener{
+        fun onItemClick(view: View, pos: Int)
+    }
+
+    inner class ToDoViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnClickListener {
         private val date: TextView = view.findViewById(R.id.text_view_date)
         private val title: TextView = view.findViewById(R.id.text_view_list_title)
         private val description: TextView = view.findViewById(R.id.text_view_list_description)
@@ -21,6 +32,15 @@ class ToDoAdapter (private val quotesList: List<ToDo>): RecyclerView.Adapter<ToD
             description.text = todo.description
             priority.text = "Priority: ${todo.priority.toString()}"
         }
+
+        init {
+            view.setOnClickListener(this)
+        }
+        override fun onClick(view: View?) {
+            if(view != null) {
+                clickListener?.onItemClick(view, bindingAdapterPosition)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
@@ -30,10 +50,14 @@ class ToDoAdapter (private val quotesList: List<ToDo>): RecyclerView.Adapter<ToD
     }
 
     override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
-        val quote = quotesList[position]
+        val quote = toDoList[position]
 
         holder.bind(quote)
     }
 
-    override fun getItemCount() = quotesList.size
+    override fun getItemCount() = toDoList.size
+
+    fun getData(pos: Int): ToDo{
+        return toDoList[pos]
+    }
 }

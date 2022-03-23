@@ -25,11 +25,17 @@ class ListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val quotesRecyclerView : RecyclerView = binding.recyclerView
-        val quotesAdapter = ToDoAdapter(ToDoDataProvider.getData())
+        val toDoRecyclerView : RecyclerView = binding.recyclerView
+        val toDoAdapter = ToDoAdapter(ToDoDataProvider.getData())
 
-        quotesRecyclerView.layoutManager = LinearLayoutManager(activity)
-        quotesRecyclerView.adapter = quotesAdapter
+        toDoRecyclerView.layoutManager = LinearLayoutManager(activity)
+        toDoRecyclerView.adapter = toDoAdapter
+
+        toDoAdapter.setOnItemClickListener(object: ToDoAdapter.ClickListener{
+            override fun onItemClick(view: View, pos: Int) {
+                Toast.makeText(context, "${toDoAdapter.getData(pos).title}\r\nPriority: ${toDoAdapter.getData(pos).priority}" , Toast.LENGTH_SHORT).show()
+            }
+        })
 
         val toDo = arguments?.getParcelable<ToDo>("todo")!!
         Toast.makeText(activity, "Added ToDo: ${toDo.title},\r\n${toDo.description},\r\n${toDo.date},\r\n${toDo.priority}", Toast.LENGTH_LONG).show()
